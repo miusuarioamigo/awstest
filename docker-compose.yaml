@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "8888:8888"  
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+  www:
+    image: nginx
+    restart: always
+    expose:
+      - "80"
+    volumes:
+      - /home/rivwox/git/awstest/www:/usr/share/nginx/html:ro
+    environment:
+      - VIRTUAL_HOST=testrvg.com,testrvg.com 
+
+  searx:
+    image: wonderfall/searx
+    restart: always
+    expose:
+      - "8888"
+    environment:
+      - VIRTUAL_HOST=searx.testrvg.com
